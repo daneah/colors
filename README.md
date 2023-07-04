@@ -14,6 +14,6 @@ The script will output HTML that you can view in your browser. As an example, ru
 $ python colors.py pittsburgh.jpg 6 300 > index.html
 ```
 
-will product an HTML page viewable in your browser that looks like the following screenshot:
+will produce an HTML page viewable in your browser that looks like the following screenshot:
 
 ![Screenshot of output HTML](screenshot.png)
