@@ -22,10 +22,8 @@ def rgb_to_hex(rgb: list[int]) -> str:
 def extract_colors(filename: str, n: int = 3) -> list[list[int]]:
     img = Image.open(filename)
     img.thumbnail((100, 100))
-    w, h = img.size
 
-    points = get_points(img)
-    clusters = kmeans(points, n)
+    clusters = kmeans(get_points(img), n)
     return [c.center.coords for c in clusters]
 
 
@@ -57,7 +55,8 @@ def generate_output(image_height_px: int, num_colors: int, colors: list[str]):
     print("</body></html>")
 
 
-def human_perception(color: list[int]) -> float:
+def relative_luminance(color: list[int]) -> float:
+    """Human perception of relative luminance: https://en.wikipedia.org/wiki/Relative_luminance"""
     return (color[0] * 299 + color[1] * 587 + color[2] * 114) / 1000
 
 
@@ -77,6 +76,6 @@ if __name__ == "__main__":
     shutil.copyfile(f"{filename}.{ext}", copied_image_filename)
 
     colors = extract_colors(copied_image_filename, n=num_colors)
-    colors = sorted(colors, key=human_perception, reverse=True)
+    colors = sorted(colors, key=relative_luminance, reverse=True)
     hex_colors = [rgb_to_hex(color) for color in colors]
     generate_output(image_height_px, num_colors, hex_colors)
